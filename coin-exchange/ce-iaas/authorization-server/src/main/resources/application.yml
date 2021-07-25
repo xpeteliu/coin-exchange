@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: authorization-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos-server:8848
+  datasource:
+    url: jdbc:mysql://mysql-server:3306/coin-exchange
+    username: root
+    password: testpwd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 9999
