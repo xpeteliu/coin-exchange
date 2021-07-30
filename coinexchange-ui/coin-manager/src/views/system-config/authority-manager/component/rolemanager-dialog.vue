@@ -60,7 +60,7 @@
         }
         data['name'] = this.ruleForm.name;
         data['code'] = this.ruleForm.code;
-        return data;
+        return this.ruleForm;
       },
       async createCallback() {
         return await sysConfigApi.createRole(this.getData());

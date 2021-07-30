@@ -11,6 +11,7 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -53,8 +54,8 @@ public class SwaggerConfig {
     }
 
     private List<SecurityContext> getSecurityContexts() {
-        List<SecurityReference> securityReferences = List.of(new SecurityReference("Authorization",
+        List<SecurityReference> securityReferences = Arrays.asList(new SecurityReference("Authorization",
                 new AuthorizationScope[]{new AuthorizationScope("global", "AccessAllResources")}));
-        return List.of(new SecurityContext(securityReferences, (each) -> true, (each) -> true, (each) -> true));
+        return Arrays.asList(new SecurityContext(securityReferences, (each) -> true, (each) -> true, (each) -> true));
     }
 }

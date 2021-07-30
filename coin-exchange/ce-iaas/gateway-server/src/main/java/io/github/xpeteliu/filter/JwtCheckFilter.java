@@ -13,7 +13,6 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
@@ -42,6 +41,7 @@ public class JwtCheckFilter implements GlobalFilter, Ordered {
         }
 
         Boolean hasKey = redisTemplate.hasKey(token);
+
         if (hasKey != null && hasKey) {
             return chain.filter(exchange);
         }

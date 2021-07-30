@@ -1,4 +1,4 @@
-package io.github.xpeteliu.service.impl;
+package io.github.xpeteliu.service;
 
 import io.github.xpeteliu.constant.LoginConstant;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;

@@ -94,7 +94,7 @@
         }
       },
       getRequestData() {
-        const props = ['id', 'name', 'description', 'menuId'];
+        const props = ['id', 'name', 'description', 'menuId', 'created', 'createBy', 'url', 'method'];
         const data = {};
         props.map(key => this.ruleForm[key] ? data[key] = this.ruleForm[key] : '')
         const menuId =

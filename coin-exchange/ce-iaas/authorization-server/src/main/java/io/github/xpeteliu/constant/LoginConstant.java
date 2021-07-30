@@ -2,9 +2,9 @@ package io.github.xpeteliu.constant;
 
 public class LoginConstant {
 
-    public static final String ADMIN_LOGIN = "admin_type";
+    public static final String ADMIN_LOGIN = "admin_login";
 
-    public static final String MEMBER_LOGIN = "member_type";
+    public static final String MEMBER_LOGIN = "member_login";
 
     public static final String ADMIN_ROLE_CODE = "ROLE_ADMIN";
 

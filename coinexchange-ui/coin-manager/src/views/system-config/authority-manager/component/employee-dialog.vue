@@ -116,7 +116,9 @@ export default {
           'email',
           'role_strings',
           'status',
-          'id'
+          'id',
+          'created',
+          'createBy'
         ]
         const data = { ...this.ruleForm }
         const roleSelect = this.roleSelect
