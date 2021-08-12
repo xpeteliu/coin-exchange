@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka-server
+      bindings:
+        refreshCandlestick-in-0:
+          destination: tradeRecords
+          content-type: application/json
+      function:
+        definition: refreshCandlestick
+  kafka:
+    consumer:
+      auto-offset-reset: latest

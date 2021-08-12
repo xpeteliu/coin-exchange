@@ -47,7 +47,7 @@ public class WebLogAspect {
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
-            throw new IllegalStateException("No request attributes bound to current thread");
+            return result;
         }
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 

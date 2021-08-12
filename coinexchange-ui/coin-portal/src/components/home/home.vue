@@ -8,7 +8,7 @@
 				<p>{{$t('m.home.siteTitleDesc')}}</p>
 			</div>
 			<img src="./img/banner_bg.jpg"/>
-			
+
 			 <div class="carousel-container" ref="swiperRef">
 			  <swiper :options="swiperOption">
 			    <!-- slides -->
@@ -35,7 +35,7 @@
     <div class="content">
 
       <!--swiper-->
-     
+
 
       <!--<table> box-shadow: #424040 0px 0px 30px 5px ;-->
       <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
@@ -134,12 +134,12 @@
           </el-table>
         </el-tab-pane>
       </el-tabs>
-    
+
 		</div>
 		<div style="clear: both;"></div>
-		
+
 		<div class="light-content">
-			
+
 				<div class="light-title">
 					<h3>{{$t('m.home.lightTitle')}}</h3>
 					<h4>{{$t('m.home.lightTitleDesc')}}</h4>
@@ -162,7 +162,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div style="clear: both;"></div>
 
     <mFooter></mFooter>
@@ -198,7 +198,7 @@
 				</transition>
 			</div>
 		</div>
-		
+
   </div>
 
 
@@ -255,7 +255,7 @@
           "zh-HK": "自選",
           "en-US": "Optional"
         },
-				
+
 				isShowServiceIcon: true
       }
     },
@@ -272,7 +272,7 @@
       //   this.showDownapp=true;
       // }
       this._getMarketList();
-      
+
 			this.$nextTick(() => {
         let imgContainer = this.$refs.imgContainerRef
         let bigImg = this.$refs.bigImg
@@ -280,7 +280,7 @@
         //  imgContainer.style="min-height:0"
         // }
       })
-			
+
 			const config = {
 				color: '255,255,255',
 				count: 500,
@@ -288,7 +288,7 @@
 			};
 
 			const cn = new CanvasNest(document.getElementById("canvasNest"), config);
-	
+
     },
     // 生命周期 -- 实例销毁
     destroyed() {
@@ -298,7 +298,7 @@
     // 事件处理
     methods: {
 			serviceHandle(){
-				
+
 			},
       handleRowClick(row) {
         console.log("row", row)
@@ -432,8 +432,8 @@
         this.$socket.unsubscribe("market.ticker", 'all-market-area');
       },
       subscribeMarkets(market) {
-        this.$socket.subscribe(this.subscribePath(market), 'market-area');
-        this.$socket.on('market-area', (data) => {
+      this.$socket.subscribe(this.subscribePath(market), 'market-area');
+        this.$socket.on(`market-area-${market}`, (data) => {
           // console.log("市场订阅",data.markets)
           if (data.markets) {
             let i = this.activeIndex;
@@ -678,7 +678,7 @@
 				top: 150px;
 				color: #ffffff;
 				text-align:center;
-				
+
 				h4{
 					font-size: 38px;
 				}
@@ -1059,7 +1059,7 @@
 				line-height: 25px;
 			}
 		}
-		
+
 	}
 	.forever{
 		color: #fff;
@@ -1067,7 +1067,7 @@
 			width: 1200px;
 			margin: 0px auto;
 			clear: both;
-			
+
 			.item{
 				width: 400px;
 				float: left;
@@ -1115,7 +1115,7 @@
 			padding: 80px; 0px;
 		}
 	}
-	
+
 	.service-box {
 		position: fixed;
 		right: 0px;

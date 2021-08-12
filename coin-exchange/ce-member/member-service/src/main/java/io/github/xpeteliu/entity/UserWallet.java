@@ -1,7 +1,11 @@
 package io.github.xpeteliu.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -36,9 +40,11 @@ public class UserWallet {
     private Byte status;
 
     @Column(value = "last_update_time")
+    @LastModifiedDate
     private java.sql.Timestamp lastUpdateTime;
 
     @Column(value = "created")
+    @CreatedDate
     private java.sql.Timestamp created;
 
 }

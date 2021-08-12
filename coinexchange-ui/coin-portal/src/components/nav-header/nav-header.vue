@@ -17,7 +17,7 @@
           <span :class="activeTab === '2' ? 'tab-link active-tab' : 'tab-link'">{{$t('m.navheader.trade')}}</span>
         </router-link>
 
-        <!--<router-link tag="li" to="/exchange">-->
+        <!--<router-link tag="li" to="/trade">-->
           <!--<span :class="activeTab === '7' ? 'tab-link active-tab' : 'tab-link'">{{$t('m.navheader.exchange')}}</span>-->
         <!--</router-link>-->
         <!--c2c交易-->

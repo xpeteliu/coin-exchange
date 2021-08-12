@@ -1,6 +1,7 @@
 package io.github.xpeteliu.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -36,6 +37,7 @@ public class UserAuthAuditRecord {
     private String auditUserName;
 
     @Column(value = "created")
+    @CreatedDate
     private java.sql.Timestamp created;
 
 }

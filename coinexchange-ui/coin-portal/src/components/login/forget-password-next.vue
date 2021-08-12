@@ -128,8 +128,8 @@
             this.loading = true;
             var params    = {
               id:this.id,
-              newpassword  : md5(this.account.u_password),
-              repassword: md5(this.account.u_repassword),
+              newpassword  : this.account.u_password,
+              repassword: this.account.u_repassword,
             };
             commonApi.registUserPassword(params).then(res => {
               this.loading = false;

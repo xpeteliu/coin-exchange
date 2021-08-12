@@ -1,7 +1,9 @@
 package io.github.xpeteliu.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -33,9 +35,11 @@ public class Sms {
     private String remark;
 
     @Column(value = "last_update_time")
+    @LastModifiedDate
     private java.sql.Timestamp lastUpdateTime;
 
     @Column(value = "created")
+    @CreatedDate
     private java.sql.Timestamp created;
 
 }

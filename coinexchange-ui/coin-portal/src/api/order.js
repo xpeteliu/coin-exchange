@@ -19,7 +19,7 @@ export const orderApi = {
       type,
     };
     return request({
-      url: '/exchange/turnoverOrders',
+      url: 'trade/turnoverOrders',
       method: 'post',
       headers: {
         'Authorization': token,
@@ -39,7 +39,7 @@ export const orderApi = {
       type
     }
     return request({
-      url : '/exchange/entrustOrders',
+      url : 'trade/entrustOrders',
       method : 'get',
       headers: {
         'Authorization': token,

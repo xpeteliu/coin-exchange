@@ -24,4 +24,6 @@ public interface AdminBankRepository extends PagingAndSortingRepository<AdminBan
     @Modifying
     @Query("update admin_bank ab set ab.status=:status where ab.id=:id;")
     void updateStatusById(Long id, Integer status);
+
+    List<AdminBank> findByStatus(Byte status);
 }

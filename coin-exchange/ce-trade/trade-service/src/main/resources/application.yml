@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka-server
+      source: createOrder
+      bindings:
+        createOrder-out-0:
+          destination: submittedOrder
+          content-type: application/json
+        receiveTradeRecords-in-0:
+          destination: tradeRecords
+          content-type: application/json
+  kafka:
+    consumer:
+      auto-offset-reset: earliest

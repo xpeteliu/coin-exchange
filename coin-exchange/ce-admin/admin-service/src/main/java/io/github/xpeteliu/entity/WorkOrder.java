@@ -44,8 +44,8 @@ public class WorkOrder {
     private java.sql.Timestamp created;
 
     @Transient
-    private String username="Test user";
+    private String username;
 
     @Transient
-    private String realName="Test name";
+    private String realName;
 }

@@ -18,7 +18,7 @@ export const commonApi = {
    */
   getMarketAll() {
     return request({
-      url: '/exchange/markets/all',
+      url: '/trade/markets/all',
       method: 'get'
     })
   },

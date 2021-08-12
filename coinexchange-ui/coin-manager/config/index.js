@@ -30,7 +30,7 @@ module.exports = {
         secure      : true,
         changeOrigin: true
       },
-      '/exchange/*': {
+      '/trade/*': {
         target      : dev,
         secure      : true,
         changeOrigin: true

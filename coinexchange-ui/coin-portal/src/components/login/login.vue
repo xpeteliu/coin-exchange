@@ -146,7 +146,7 @@
         this.setUserName(data.username)
         this.setExpireTime(expireTime)
         this.setToken(data.access_token)
-        this.setRefreshToken(data.refresh_token)
+        //this.setRefreshToken(data.refresh_token)
         let willJump = this.$route.query.redirect;
         if (willJump !== undefined) {
           this.$router.replace(willJump); //预跳转页
@@ -165,7 +165,7 @@
           // 极验返回结果有延迟，这里也要延迟
           if (Timer) clearTimeout(Timer);
           const {geetest_challenge, geetest_validate, geetest_seccode} = root.captchaSuccess;
-          if (!geetest_challenge || !geetest_validate || !geetest_seccode) {
+          if (false&&(!geetest_challenge || !geetest_validate || !geetest_seccode)) {
             if (checkStatus === true) {
               root.$message({
                 message: this.$t('m.userCenter.geeTestButtonText'),
@@ -178,7 +178,7 @@
               }, 1000);
               return;
             }
-          } 
+          }
           this.loading = true;
 
 
@@ -194,10 +194,10 @@
             username: this.ruleForm.mobile,
             password: this.ruleForm.password ,
             uuid: root.uuidCode,
-            geetest_challenge,
-            geetest_validate,
-            geetest_seccode,
-            ga_code 
+            // geetest_challenge,
+            // geetest_validate,
+            // geetest_seccode,
+            // ga_code
           };
           loginRegist.login(data).then(res => {
             console.log("结果",res)

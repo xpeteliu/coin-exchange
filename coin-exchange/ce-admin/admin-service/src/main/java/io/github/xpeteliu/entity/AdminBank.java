@@ -16,14 +16,17 @@ public class AdminBank {
     @Column(value = "id")
     private Long id;
 
+    @NotBlank
     @Column(value = "name")
     @NotBlank
     private String name;
 
+    @NotBlank
     @Column(value = "bank_name")
     @NotBlank
     private String bankName;
 
+    @NotBlank
     @Column(value = "bank_card")
     @NotBlank
     private String bankCard;

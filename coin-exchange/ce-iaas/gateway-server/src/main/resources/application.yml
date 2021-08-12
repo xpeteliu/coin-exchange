@@ -24,6 +24,18 @@ spring:
           - Path=/user/**
         filters:
           - StripPrefix=1
+      - id: finance-service_router
+        uri: lb://finance-service
+        predicates:
+          - Path=/finance/**
+        filters:
+          - StripPrefix=1
+      - id: trade-service_router
+        uri: lb://trade-service
+        predicates:
+          - Path=/trade/**
+        filters:
+          - StripPrefix=1
 
     sentinel:
       datasource:

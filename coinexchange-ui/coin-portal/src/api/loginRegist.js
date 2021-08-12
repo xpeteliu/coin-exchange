@@ -8,7 +8,7 @@ export const loginRegist = {
    * 登录
    */
   login(data) {
-    data.password = md5(data.password);
+    //data.password = md5(data.password);
     return request({
       url: '/user/login',
       method: 'post',
@@ -23,7 +23,7 @@ export const loginRegist = {
     alert(uuid)
     let reqData = {
       countryCode,
-      password : md5(password),
+      password : password,
       invitionCode: invitationCode,
       validateCode,
       geetest_challenge,
@@ -87,7 +87,7 @@ export const loginRegist = {
 
   // 设置新的登录密码
   setPassword(data){
-    data.password = md5(data.password);
+    data.password = data.password;
     return request({
       url: '/user/users/setPassword',
       method: 'post',

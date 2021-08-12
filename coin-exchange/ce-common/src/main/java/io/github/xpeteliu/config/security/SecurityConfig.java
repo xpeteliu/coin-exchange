@@ -1,5 +1,6 @@
 package io.github.xpeteliu.config.security;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
+@ConditionalOnClass(ResourceServerConfigurerAdapter.class)
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends ResourceServerConfigurerAdapter {
@@ -27,6 +29,7 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(expressionInterceptUrlRegistry ->
                         expressionInterceptUrlRegistry.antMatchers(
+                                "/test",
                                 "/login",
                                 "/v3/api-docs",
                                 "/swagger-resources/configuration/ui",

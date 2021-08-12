@@ -6,14 +6,14 @@ export const homeApi = {
   // 新的首页 包含交易区的market接口
   getMarketListNew(){
     return request({
-      url : '/exchange/tradeAreas/markets',
+      url : 'trade/tradeAreas/markets',
       method : 'get',
     })
   },
   getMarketList(){
     return request({
       // url    : '/v2/s/trade/market/all',
-      url    : '/exchange/markets/all',
+      url    : 'trade/markets/all',
       method : 'get',
     }).then((res) => {
       return Promise.resolve(res.data)
@@ -39,7 +39,7 @@ export const homeApi = {
       method : 'get',
       params:{
         current: current ,
-        size: size 
+        size: size
       }
     })
   },

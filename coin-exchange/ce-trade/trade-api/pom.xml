@@ -16,4 +16,12 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.github.xpeteliu</groupId>
+            <artifactId>ce-common</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+
 </project>

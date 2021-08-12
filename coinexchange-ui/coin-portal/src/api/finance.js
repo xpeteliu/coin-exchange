@@ -24,7 +24,7 @@ export const financeApi = {
       status = null ;
     }
     return request({
-      url : '/finance/cashRecharges/user/records',
+      url : '/finance/cashRecharge/user/records',
       method : 'get',
       headers:{
         'Authorization': token,
@@ -32,7 +32,7 @@ export const financeApi = {
       params: {
         'size': size ,
         'current': current ,
-        'status': status 
+        'status': status
       },
     });
   },
@@ -70,7 +70,7 @@ export const financeApi = {
       params: {
         'size': size ,
         'current': current ,
-        'status': status 
+        'status': status
       },
     })
   },
@@ -99,7 +99,7 @@ export const financeApi = {
        coinId,
        mum,
        num,
-       payPassword : md5(payPassword),
+       payPassword : payPassword,
        validateCode
      };
      return request({
@@ -121,7 +121,7 @@ export const financeApi = {
       num,
     };
     return request({
-      url : '/finance/cashRecharges/buy',
+      url : '/finance/cashRecharge/buy',
       method : 'post',
       headers: {
         'Authorization': token,
@@ -160,7 +160,7 @@ export const financeApi = {
       bankCity   : bankCity,
       bankAddr   : bankAddr,*/
       bankCard   : bankCard,
-      payPassword: md5(payPassword),
+      payPassword: payPassword,
     }
     return request({
       url : '/user/userBanks/bind',
@@ -222,7 +222,7 @@ export const financeApi = {
       coinId,
       name,
       addr,
-      payPassword : md5(payPassword)
+      payPassword : payPassword
     }
     return request({
       url : '/user/userWallets',
@@ -284,7 +284,7 @@ export const financeApi = {
       },
       params:{
         addressId: addressId ,
-        payPassword: md5(payPassword)
+        payPassword: payPassword
       },
     });
   },
@@ -296,7 +296,7 @@ export const financeApi = {
       addressId,
       amount,
       coinId,
-      payPassword : md5(payPassword),
+      payPassword : payPassword,
       verifyCode
     }
     return request({

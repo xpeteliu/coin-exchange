@@ -36,7 +36,7 @@
                   </el-form-item>
 
                   <el-form-item :label="$t('m.userCenter.idNumber')" prop="voucherCode">
-                    <el-input type="password" v-model="ruleForm.voucherCode" 
+                    <el-input type="password" v-model="ruleForm.voucherCode"
                               :placeholder="$t('m.patch.placeholder.voucherCode')"></el-input>
                   </el-form-item>
 
@@ -193,7 +193,7 @@ import { isAuth } from '../../store/getters'
       // }
     },
     mounted() {
-      
+
     },
     methods: {
       ...mapMutations({
@@ -221,7 +221,7 @@ import { isAuth } from '../../store/getters'
           // 极验返回结果有延迟，这里也要延迟
           if (Timer) clearTimeout(Timer);
           const {geetest_challenge, geetest_validate, geetest_seccode} = root.captchaSuccess;
-          if (!geetest_challenge || !geetest_validate || !geetest_seccode) {
+          if (false&&(!geetest_challenge || !geetest_validate || !geetest_seccode)) {
             if (checkStatus === true) {
               root.$message({
                 message: this.$t('m.userCenter.geeTestButtonText'),

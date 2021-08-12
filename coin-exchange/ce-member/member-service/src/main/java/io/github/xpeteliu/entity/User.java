@@ -1,9 +1,16 @@
 package io.github.xpeteliu.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -17,13 +24,17 @@ public class User {
     @Column(value = "type")
     private Byte type;
 
+    @NotBlank
     @Column(value = "username")
+    @NotBlank
     private String username;
 
     @Column(value = "country_code")
     private String countryCode;
 
+    @NotBlank
     @Column(value = "mobile")
+    @NotBlank
     private String mobile;
 
     @Column(value = "password")
@@ -96,9 +107,17 @@ public class User {
     private Long refeAuthId;
 
     @Column(value = "last_update_time")
+    @LastModifiedDate
     private java.sql.Timestamp lastUpdateTime;
 
     @Column(value = "created")
+    @CreatedDate
     private java.sql.Timestamp created;
+
+    @Transient
+    private Byte seniorAuthStatus;
+
+    @Transient
+    private String seniorAuthDesc;
 
 }

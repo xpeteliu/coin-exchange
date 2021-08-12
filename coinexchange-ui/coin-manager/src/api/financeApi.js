@@ -12,7 +12,7 @@ export const financeApi = {
     params.current = current
     params.size = size
     return request({
-      url: '/finance/cashRecharges/records',
+      url: '/finance/cashRecharge/records',
       method: 'get',
       params: params
     })

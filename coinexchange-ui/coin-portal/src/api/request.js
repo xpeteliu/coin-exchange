@@ -16,29 +16,29 @@ const refreshTokenUrl = "/user/login/refreshToken";
 const requestForexFunds = "/v2/s/account/funds/"
 // request interceptor
 service.interceptors.request.use(config => {
-  const data = getExpireTime();
-  if (data) {
-    let {expire, updateTime} = data;
+  // const data = getExpireTime();
+  // if (data) {
+  //   let {expire, updateTime} = data;
 
-    let nowTime = +new Date();
-    let activeTime = (nowTime - updateTime);
-    // console.log("activeTime", activeTime,expire,new Date(nowTime),new Date(updateTime));
-    // 如果当前活跃时间减去令牌更新时间小于过期时间（毫秒）
-    if (activeTime < expire) {
-        // 避免频繁调用接口  当快过期的时候刷新
-      if(activeTime>=(4*expire/5)){
-        let token = store.getters.refreshToken
-        // 当前接口不是刷新token 和轮训资产的接口 ，且token不为空
-        if (config.url.indexOf(refreshTokenUrl) ===-1 &&config.url.indexOf(requestForexFunds)===-1  && token !== "") {
-          refreshToken(token)
-        }
-      }
-    } else {
-      // 在刷新之前需要先清空token
-      store.commit('SET_EXPIRE_TIME', '')
-      store.comiit("SET_TOKEN",'')
-    }
-  }
+  //   let nowTime = +new Date();
+  //   let activeTime = (nowTime - updateTime);
+  //   // console.log("activeTime", activeTime,expire,new Date(nowTime),new Date(updateTime));
+  //   // 如果当前活跃时间减去令牌更新时间小于过期时间（毫秒）
+  //   if (activeTime < expire) {
+  //       // 避免频繁调用接口  当快过期的时候刷新
+  //     if(activeTime>=(4*expire/5)){
+  //       let token = store.getters.refreshToken
+  //       // 当前接口不是刷新token 和轮训资产的接口 ，且token不为空
+  //       if (config.url.indexOf(refreshTokenUrl) ===-1 &&config.url.indexOf(requestForexFunds)===-1  && token !== "") {
+  //         refreshToken(token)
+  //       }
+  //     }
+  //   } else {
+  //     // 在刷新之前需要先清空token
+  //     store.commit('SET_EXPIRE_TIME', '')
+  //     store.comiit("SET_TOKEN",'')
+  //   }
+  // }
   // Do something before request is sent
   if (store.getters.token) {
     config.headers['Authorization'] = store.getters.token // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
@@ -94,7 +94,7 @@ function refreshToken(token) {
     let expireTime = JSON.stringify({
       updateTime: +new Date(),
       // expire:5*1000
-      expire: data.expire * 1000 
+      expire: data.expire * 1000
     });
     store.commit('SET_EXPIRE_TIME', expireTime)
     store.commit('SET_TOKEN', data.access_token)

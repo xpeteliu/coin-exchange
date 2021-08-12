@@ -29,7 +29,7 @@ public class SysPrivilegeController {
     @ApiOperation("Paged query on privileges")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "current", value = "Current page"),
-            @ApiImplicitParam(name = "size", value = "Total number of pages")
+            @ApiImplicitParam(name = "size", value = "Number of items on every page")
     })
     @PreAuthorize("hasAuthority('sys_privilege_query')")
     public R<PagedResult<SysPrivilege>> findWithPaging(int current, int size) {

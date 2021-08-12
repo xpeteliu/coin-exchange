@@ -86,7 +86,7 @@
         console.log("当前对话框索引 ",scope.$index,scope.row)
         let row = scope.row
         if (!this.token) {
-          this.$router.push({path: '/login', query: {redirect: "/exchange"}});
+          this.$router.push({path: '/login', query: {redirect: "/trade"}});
         } else {
           let dialogData = {
             marketDataIndex:this.marketDataIndex,

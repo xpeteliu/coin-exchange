@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>trade-api</module>
+        <module>trade-service</module>
     </modules>
 
     <properties>

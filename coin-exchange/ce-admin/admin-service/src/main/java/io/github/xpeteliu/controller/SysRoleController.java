@@ -28,7 +28,7 @@ public class SysRoleController {
     @ApiOperation("Paged query on roles")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "current", value = "Current page"),
-            @ApiImplicitParam(name = "size", value = "Total number of pages")
+            @ApiImplicitParam(name = "size", value = "Number of items on every page")
     })
     @PreAuthorize("hasAuthority('sys_role_query')")
     public R<PagedResult<SysRole>> findWithPaging(int current, int size,

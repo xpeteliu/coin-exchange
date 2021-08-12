@@ -96,4 +96,10 @@ public class WebConfigController {
         }
         return R.success("WebConfig successfully updated");
     }
+
+    @GetMapping("/banners")
+    @ApiOperation("Get banners for PC clients")
+    public R<List<WebConfig>> findBanners(){
+        return R.success(webConfigService.findBanners());
+    }
 }

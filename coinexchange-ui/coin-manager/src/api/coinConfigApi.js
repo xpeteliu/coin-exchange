@@ -190,7 +190,7 @@ export const marketApi = {
     params.current = current
     params.size = size
     return request({
-      url: '/exchange/markets',
+      url: '/trade/markets',
       method: 'get',
       params,
     })
@@ -199,7 +199,7 @@ export const marketApi = {
   // 启用/禁用 币种 1:启用；2:禁用
   setStatus(data) {
     return request({
-      url: '/exchange/markets/setStatus',
+      url: '/trade/markets/setStatus',
       method: 'post',
       data,
     })
@@ -208,7 +208,7 @@ export const marketApi = {
   // 获取所有币币交易市场名称
   getMarketAll() {
     return request({
-      url: '/exchange/markets/all',
+      url: '/trade/markets/all',
       method: 'get',
     })
   },
@@ -225,7 +225,7 @@ export const marketApi = {
   // 获取所有币币交易区域
   getTradeAreaAll(status = 1) {
     return request({
-      url: '/exchange/tradeAreas/all',
+      url: '/trade/tradeAreas/all',
       method: 'get',
       params: {status}
     })
@@ -234,7 +234,7 @@ export const marketApi = {
   // 新增币种
   addMarket(data) {
     return request({
-      url: '/exchange/markets',
+      url: '/trade/markets',
       method: 'post',
       data,
     })
@@ -243,7 +243,7 @@ export const marketApi = {
   // 修改币种
   editMarket(data) {
     return request({
-      url: '/exchange/markets',
+      url: '/trade/markets',
       method: 'patch',
       data
     })

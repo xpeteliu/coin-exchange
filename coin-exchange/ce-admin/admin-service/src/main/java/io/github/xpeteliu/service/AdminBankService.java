@@ -1,6 +1,8 @@
 package io.github.xpeteliu.service;
 
+import io.github.xpeteliu.dto.AdminBankDto;
 import io.github.xpeteliu.entity.AdminBank;
+import io.github.xpeteliu.mapper.AdminBankDtoMapper;
 import io.github.xpeteliu.repository.AdminBankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,5 +34,10 @@ public class AdminBankService {
 
     public void updateStatus(Long id, Integer status) {
         adminBankRepository.updateStatusById(id, status);
+    }
+
+    public List<AdminBankDto> findAllAvailable() {
+        List<AdminBank> resultList=adminBankRepository.findByStatus((byte)1);
+        return AdminBankDtoMapper.INSTANCE.entity2Dto(resultList);
     }
 }

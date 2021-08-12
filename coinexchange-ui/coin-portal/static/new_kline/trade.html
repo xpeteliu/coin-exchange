@@ -520,7 +520,7 @@ var option = {
 	url: window.config.socketServer,
 	subscribePath: "market.~symbol~.kline.~period~",
   ///trade/market/kline/{symbol}/{lintType}
-   ajaxURL:window.config.ajaxServer+"/exchange/markets/kline/~symbol~/~period~"
+   ajaxURL:window.config.ajaxServer+"/trade/markets/kline/~symbol~/~period~"
 
 };
 new KLine(option).draw()

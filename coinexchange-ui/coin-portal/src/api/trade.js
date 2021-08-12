@@ -4,21 +4,21 @@ export const tradeApi = {
   // 未完成委托
   serverGetEntrustOrderList(current, size, symbol, token) {
     return request({
-      url: `/exchange/entrustOrders/${symbol}`,
+      url: `/trade/entrustOrders/${symbol}`,
       method: 'get',
       headers: {
         'Authorization': token,
       },
       params:{
         current: current ,
-        size: size 
+        size: size
       }
     })
   },
   // 历史委托订单
   serverGetTurnoverOrderList(current, size, symbol, token) {
     return request({
-      url: `/exchange/entrustOrders/history/${symbol}`,
+      url: `/trade/entrustOrders/history/${symbol}`,
       method: 'get',
       headers: {
         'Authorization': token,
@@ -38,7 +38,7 @@ export const tradeApi = {
       volume,
     };
     return request({
-      url: '/exchange/entrustOrders',
+      url: 'trade/entrustOrders',
       method: 'post',
       headers: {
         'Authorization': token,
@@ -49,7 +49,7 @@ export const tradeApi = {
   //撤销委托
   serverCancelOrder(orderId, token) {
     return request({
-      url: `/exchange/entrustOrders/${orderId}`,
+      url: `/trade/entrustOrders/${orderId}`,
       method: 'delete',
       headers: {
         'Authorization': token,
@@ -69,7 +69,7 @@ export const tradeApi = {
   //个人收藏交易市场信息
   serverFavorite(token) {
     return request({
-      url: '/exchange/tradeAreas/market/favorite',
+      url: 'trade/tradeAreas/market/favorite',
       method: 'get',
       headers: {
         'Authorization': token,
@@ -80,14 +80,14 @@ export const tradeApi = {
   //获取深度数据
   getDepth(symbol,mergeType) {
     return request({
-      url: `/exchange/markets/depth/${symbol}/${mergeType}`,
+      url: `/trade/markets/depth/${symbol}/${mergeType}`,
       method: 'get',
     })
   },
   // 获取最新成交列表
   getTrades(symbol) {
     return request({
-      url: `/exchange/markets/trades/${symbol}`,
+      url: `/trade/markets/trades/${symbol}`,
       method: 'get',
     })
   }

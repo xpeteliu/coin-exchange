@@ -250,7 +250,7 @@
           const {geetest_challenge, geetest_validate, geetest_seccode} = this.captchaSuccess;
           const uuid = this.uuidCode ;
           alert(uuid)
-          if (!geetest_challenge || !geetest_validate || !geetest_seccode) {
+          if (false&&(!geetest_challenge || !geetest_validate || !geetest_seccode)) {
             this.$message({
               message: this.$t('m.userCenter.geeTestButtonText'),
               type: 'error'

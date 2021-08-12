@@ -1,6 +1,8 @@
 package io.github.xpeteliu.controller;
 
+import io.github.xpeteliu.dto.AdminBankDto;
 import io.github.xpeteliu.entity.AdminBank;
+import io.github.xpeteliu.feign.AdminBankServiceFeign;
 import io.github.xpeteliu.model.PagedResult;
 import io.github.xpeteliu.model.R;
 import io.github.xpeteliu.service.AdminBankService;
@@ -11,15 +13,16 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/adminBanks")
 @Api("Bank Card Management")
-public class AdminBankController {
+public class AdminBankController implements AdminBankServiceFeign {
 
     @Autowired
     AdminBankService adminBankService;
@@ -28,7 +31,7 @@ public class AdminBankController {
     @ApiOperation("Paged query on bank cards")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "current", value = "Current page"),
-            @ApiImplicitParam(name = "size", value = "Total number of pages"),
+            @ApiImplicitParam(name = "size", value = "Number of items on every page"),
             @ApiImplicitParam(name = "bankCard", value = "Bank card number to search for")
     })
     @PreAuthorize("hasAuthority('admin_bank_query')")
@@ -89,4 +92,9 @@ public class AdminBankController {
         return R.success("AdminBank status updated successfully");
     }
 
+    @Override
+    @GetMapping("/list")
+    public List<AdminBankDto> findAllAdminBanks() {
+        return adminBankService.findAllAvailable();
+    }
 }

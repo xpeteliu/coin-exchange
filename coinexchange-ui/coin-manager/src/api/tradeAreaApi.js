@@ -14,7 +14,7 @@ export const tradeAreaApi = {
     params.current = current
     params.size = size
     return request({
-      url: '/exchange/tradeAreas',
+      url: '/trade/tradeAreas',
       method: 'get',
       params: params
     })
@@ -24,7 +24,7 @@ export const tradeAreaApi = {
    */
   createdTradeArea(data) {
     return request({
-      url: '/exchange/tradeAreas',
+      url: '/trade/tradeAreas',
       method: 'post',
       data: data
     })
@@ -34,7 +34,7 @@ export const tradeAreaApi = {
    */
   updateTradeArea(data) {
     return request({
-      url: '/exchange/tradeAreas',
+      url: '/trade/tradeAreas',
       method: 'patch',
       data: data
     })
@@ -45,7 +45,7 @@ export const tradeAreaApi = {
   **/
   setTradeAreaStats(params){
     return request({
-      url:'/exchange/tradeAreas/status',
+      url:'/trade/tradeAreas/status',
       method:'post',
       data:params
     })
@@ -56,7 +56,7 @@ export const tradeAreaApi = {
   **/
   deleteTradeArea(data){
     return request({
-      url:'/exchange/tradeAreas/delete',
+      url:'/trade/tradeAreas/delete',
       method:'post',
       data:data
     })

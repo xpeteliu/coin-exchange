@@ -27,6 +27,9 @@ public class FileController {
             if (file.isEmpty()) {
                 return R.failure("", "Uploaded file is empty");
             }
+
+            // TODO: store the files in OSS server
+
             String destPath = "E:/images/" + file.getOriginalFilename();
             File dest = new File(destPath);
             dest.createNewFile();

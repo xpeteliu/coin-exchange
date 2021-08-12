@@ -1018,7 +1018,7 @@
 
         this.$socket.subscribe(`market.${symbol}.depth.${mergeDepth}`, 'market-depth');
 
-        this.$socket.on('market-depth', (data) => {
+        this.$socket.on(`market-depth-${symbol}`, (data) => {
           this.depthsData = data.tick;
           if(kline && kline.contentWindow) {
             kline.contentWindow.set_current_depth(this.depthsData);
@@ -1065,7 +1065,7 @@
       subscribeTrades() {
         let symbol = this.currentMarket.symbol.toLowerCase();
         this.$socket.subscribe(`market.${symbol}.trade.detail`, 'market-trade');
-        this.$socket.on('market-trade', (data) => {
+        this.$socket.on(`market-trade-${symbol}`, (data) => {
           // console.log("成交记录",data)
           this.tradesData = data.data;
         })
@@ -1104,7 +1104,7 @@
 
       subscribeMarkets(market) {
         this.$socket.subscribe(this.subscribePath(market), 'market-area');
-        this.$socket.on('market-area', (data) => {
+        this.$socket.on(`market-area-${market}`, (data) => {
           // console.log("所有市场socket:",data)
           let index = this.activeIndex;
           this.marketList[index].markets = data.markets;
