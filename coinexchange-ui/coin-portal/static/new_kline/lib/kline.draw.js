@@ -52,7 +52,7 @@ function KLine(option) {
   this.button_down = false
   this.init = false
   this.type = 'stomp'
-  this.url = 'ws://localhost:8326'
+  this.url = ''
   this.subscribePath = ''
   this.stompClient = null
   this.socketConnected = false
@@ -8894,7 +8894,10 @@ function requestData (init) {
       url: ajaxUrl,
       method: 'get',
       success: function(res) {
-        GLOBAL_VAR.KLineData = JSON.parse(res.data)
+        GLOBAL_VAR.KLineData = res.data
+        // if (GLOBAL_VAR.KLineData == null) {
+        //   GLOBAL_VAR.KLineData = []
+        // }
         GLOBAL_VAR.chartMgr.updateData('frame0.k0', GLOBAL_VAR.KLineData)
         clear_refresh_counter()
         $('.bk-animationload').fadeOut()
@@ -8912,12 +8915,12 @@ function socketConnect() {
   if (webSocketInit) {
     if (!GLOBAL_VAR.stompClient || !GLOBAL_VAR.socketConnected) {
       GLOBAL_VAR.stompClient = new SocketHandler(GLOBAL_VAR.url)
-      GLOBAL_VAR.stompClient.connect(10000)
       GLOBAL_VAR.socketConnected = true
+      GLOBAL_VAR.stompClient.connect(10000, () => { sendSocketRequest() })
     }
     webSocketInit = false
   }
-  sendSocketRequest()
+  // sendSocketRequest()
 }
 
 function sendSocketRequest () {
@@ -8958,8 +8961,8 @@ function subscribeCallback(res) {
   // console.log(res)
   if (GLOBAL_VAR.KLineData != undefined && GLOBAL_VAR.KLineData != null) {
   	var length = GLOBAL_VAR.KLineData.length
-  	var letastLine = GLOBAL_VAR.KLineData[length - 1]
-  	if (letastLine[0] == res.tick[0]) {
+  	var lastLine = GLOBAL_VAR.KLineData[length - 1]
+  	if (lastLine && lastLine[0] == res.tick[0]) {
   		GLOBAL_VAR.KLineData[length - 1] = res.tick
   	} else {
   		GLOBAL_VAR.KLineData[length] = res.tick

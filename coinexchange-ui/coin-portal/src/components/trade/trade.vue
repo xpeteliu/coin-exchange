@@ -146,8 +146,7 @@
                         v-on:click="depthAsksClick(list.price,list.volume)">
                       <!--.reverse()-->
                       <div class="data-item">
-                            <span>{{$t('m.trade.sell')}}({{(depthsData.asks.length - index)
-                            <10? '0'+(depthsData.asks.length - index) : depthsData.asks.length - index}})</span>
+                            <span>{{$t('m.trade.sell')}}({{!((depthsData.asks.length - index)>=10)? '0'+(depthsData.asks.length - index) : depthsData.asks.length - index}})</span>
                         <span v-html="formatNumber(list.price,currentMarket.priceScale)" class="number-font" style="text-align: center"></span>
                         <span v-html="formatNumber(list.volume,currentMarket.numScale)" class="number-font" style="text-align: right"></span>
                       </div>
@@ -175,8 +174,7 @@
                     <li v-for="(list,index) in depthsData.bids" :key="index"
                         v-on:click="depthBidsClick(list.price,list.volume)">
                       <div class="data-item">
-                        <span>{{$t('m.trade.buy')}}({{index
-                            <9? '0'+(index+1) : index+1}})</span>
+                        <span>{{$t('m.trade.buy')}}({{!(index>=9)? '0'+(index+1) : index+1}})</span>
                         <!--index<9? '0'+(index+1) : index+1-->
                         <span v-html="formatNumber(list.price,currentMarket.priceScale)" class="number-font" style="text-align: center"></span>
                         <span v-html="formatNumber(list.volume,currentMarket.numScale)" class="number-font" style="text-align: right"></span>
@@ -276,7 +274,8 @@
               <div class="wgt-trades-data" id="trades-data-item">
                 <!--<transition-group mode="out-in" name="flip-list" tag="ul">-->
                 <ul>
-                  <li v-for="(list,index) in tradesData" :key="index+list.time" :class="list.type=='1' ? 'b' : 's' "
+                  <!-- <li v-for="(list,index) in tradesData" :key="index+list.time" :class="list.type=='1' ? 'b' : 's' " -->
+                  <li v-for="(list,index) in tradesData" :key="index" :class="list.type=='1' ? 'b' : 's' "
                       @click="depthBidsClick(list.price, list.volume)">
                       <span class="number-font">
                         <i>{{list.time}}</i>
@@ -1104,7 +1103,7 @@
 
       subscribeMarkets(market) {
         this.$socket.subscribe(this.subscribePath(market), 'market-area');
-        this.$socket.on(`market-area-${market}`, (data) => {
+        this.$socket.on(`market-area-${market.toLowerCase()}`, (data) => {
           // console.log("所有市场socket:",data)
           let index = this.activeIndex;
           this.marketList[index].markets = data.markets;

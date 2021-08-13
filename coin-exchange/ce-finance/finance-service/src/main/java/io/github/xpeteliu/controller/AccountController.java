@@ -1,7 +1,6 @@
 package io.github.xpeteliu.controller;
 
 import io.github.xpeteliu.entity.Account;
-import io.github.xpeteliu.feign.AccountServiceFeignClient;
 import io.github.xpeteliu.model.R;
 import io.github.xpeteliu.model.SymbolAssetResult;
 import io.github.xpeteliu.service.AccountService;
@@ -13,7 +12,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/account")
-public class AccountController implements AccountServiceFeignClient {
+public class AccountController {
 
     @Autowired
     private AccountService accountService;
@@ -30,21 +29,13 @@ public class AccountController implements AccountServiceFeignClient {
         return R.success(accountService.findSymbolAsset(symbol));
     }
 
-    @Override
     @PostMapping("/freezeAccountBalance")
     public void freezeAccountBalance(Long userId, Long coinId, BigDecimal mum, String type, Long orderId, BigDecimal fee) {
         accountService.freezeAccountBalance(userId, coinId, mum, type, orderId, fee);
     }
 
-    @Override
-    @GetMapping("/transferSellAmount")
-    public void transferSellAmount(Long fromUserId, Long toUserId, Long coinId, BigDecimal amount, String businessType, Long orderId) {
-        accountService.transferSellAmount(fromUserId, toUserId, coinId, amount, businessType, orderId);
-    }
-
-    @Override
-    @GetMapping("/transferBuyAmount")
-    public void transferBuyAmount(Long fromUserId, Long toUserId, Long coinId, BigDecimal amount, String businessType, Long orderId) {
-        accountService.transferBuyAmount(fromUserId, toUserId, coinId, amount, businessType, orderId);
+    @GetMapping("/transferBalance")
+    public void transferBalance(Long fromUserId, Long toUserId, Long coinId, BigDecimal amount, String businessType, Long orderId) {
+        accountService.transferBalance(fromUserId, toUserId, coinId, amount, businessType, orderId);
     }
 }

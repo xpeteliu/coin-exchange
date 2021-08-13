@@ -5,6 +5,7 @@ import io.github.xpeteliu.entity.Market;
 import io.github.xpeteliu.entity.TurnoverOrder;
 import io.github.xpeteliu.feign.AccountServiceFeignClient;
 import io.github.xpeteliu.feign.CoinServiceFeignClient;
+import io.github.xpeteliu.model.CoinTransferRequest;
 import io.github.xpeteliu.model.EntrustOrderResult;
 import io.github.xpeteliu.model.EntrustedOrderParam;
 import io.github.xpeteliu.model.TradeRecord;
@@ -188,12 +189,30 @@ public class EntrustOrderService {
         Long marketId = sellOrder.getMarketId();
         Market market = marketService.findById(marketId);
 
-        createTurnoverRecord(tradeRecord, buyOrder, sellOrder, market);
+        // createTurnoverRecord(tradeRecord, buyOrder, sellOrder, market);
         updateEntrustOrder(tradeRecord, buyOrder, sellOrder, market);
         updateAccountBalance(tradeRecord, buyOrder, sellOrder, market);
     }
 
     private void updateAccountBalance(TradeRecord tradeRecord, EntrustOrder buyOrder, EntrustOrder sellOrder, Market market) {
+
+        streamBridge.send("sendCoinTransferRequest-out-0",
+                new CoinTransferRequest(
+                        buyOrder.getUserId(),
+                        sellOrder.getUserId(),
+                        market.getBuyCoinId(),
+                        market.getSellCoinId(),
+                        tradeRecord.getBuyTurnover(),
+                        tradeRecord.getAmount(),
+                        Long.valueOf(tradeRecord.getBuyOrderId()),
+                        Long.valueOf(tradeRecord.getSellOrderId()),
+                        "Coin pair trade"
+                )
+        );
+
+    }
+
+    private void updateEntrustOrder(TradeRecord tradeRecord, EntrustOrder buyOrder, EntrustOrder sellOrder, Market market) {
         sellOrder.setDeal(sellOrder.getDeal().add(tradeRecord.getAmount()));
         if (tradeRecord.getAmount().compareTo(sellOrder.getVolume()) == 0) {
             sellOrder.setStatus(1);
@@ -205,25 +224,6 @@ public class EntrustOrderService {
             buyOrder.setStatus(1);
         }
         entrustOrderRepository.save(buyOrder);
-    }
-
-    private void updateEntrustOrder(TradeRecord tradeRecord, EntrustOrder buyOrder, EntrustOrder sellOrder, Market market) {
-        accountServiceFeignClient.transferBuyAmount(
-                buyOrder.getUserId(),
-                sellOrder.getUserId(),
-                market.getBuyCoinId(),
-                tradeRecord.getBuyTurnover(),
-                "Coin pair trade",
-                Long.valueOf(tradeRecord.getBuyOrderId()));
-
-
-        accountServiceFeignClient.transferSellAmount(
-                sellOrder.getUserId(),
-                buyOrder.getUserId(),
-                market.getSellCoinId(),
-                tradeRecord.getSellTurnover(),
-                "Coin pair trade",
-                Long.valueOf(tradeRecord.getSellOrderId()));
     }
 
     private void createTurnoverRecord(TradeRecord tradeRecord, EntrustOrder buyOrder, EntrustOrder sellOrder, Market market) {

@@ -1,6 +1,10 @@
 package io.github.xpeteliu.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import io.github.xpeteliu.constant.CommonConstant;
 import io.github.xpeteliu.dto.MarketDto;
+import io.github.xpeteliu.dto.TradeMarketDto;
 import io.github.xpeteliu.entity.Market;
 import io.github.xpeteliu.entity.TurnoverOrder;
 import io.github.xpeteliu.model.DepthResult;
@@ -8,6 +12,7 @@ import io.github.xpeteliu.model.PagedResult;
 import io.github.xpeteliu.model.R;
 import io.github.xpeteliu.service.MarketService;
 import io.github.xpeteliu.service.TurnoverOrderService;
+import io.github.xpeteliu.utils.SupplementaryUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -15,10 +20,15 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/markets")
@@ -30,6 +40,9 @@ public class MarketController {
 
     @Autowired
     TurnoverOrderService turnoverOrderService;
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
 
     @GetMapping
     @ApiOperation("Paged query on markets")
@@ -119,6 +132,24 @@ public class MarketController {
         return R.success(turnoverOrderService.findNewestNRecordsBySymbol(symbol, 60));
     }
 
+    @GetMapping("/kline/{symbol}/{type}")
+    @ApiImplicitParams(
+            {@ApiImplicitParam(name = "symbol", value = "Symbol of coin pair"),
+                    @ApiImplicitParam(name = "type", value = "Type of KLine")}
+    )
+    public R<List<List>> queryKLine(@PathVariable String symbol, @PathVariable String type) {
+        String key = String.format("market-kline-%s-%s", symbol, type);
+        List<String> KLineStrings = redisTemplate.opsForList().range(key, 0, CommonConstant.REDIS_MAX_CACHE_KLINE_SIZE - 1);
+
+        if (CollectionUtils.isEmpty(KLineStrings)) {
+            return R.success(Collections.emptyList());
+        }
+
+        List<List> result = KLineStrings.stream().map(SupplementaryUtils::kLineString2OutputList).collect(Collectors.toList());
+
+        return R.success(result);
+    }
+
     @GetMapping("/findBySymbol")
     public MarketDto findBySymbol(String symbol) {
         return marketService.findBySymbol(symbol);
@@ -129,4 +160,8 @@ public class MarketController {
         return marketService.findAllMarkets();
     }
 
+    @GetMapping(value = "/findTradeMarketsByTradeAreaId")
+    List<TradeMarketDto> findTradeMarketsByTradeAreaId(@RequestParam Long tradeAreaId) {
+        return marketService.findTradeMarketsByTradeAreaId(tradeAreaId);
+    }
 }

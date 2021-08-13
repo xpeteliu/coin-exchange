@@ -67,7 +67,7 @@ public class JwtCheckFilter implements GlobalFilter, Ordered {
 
     private boolean isTokenRequired(ServerWebExchange exchange) {
         String path = exchange.getRequest().getPath().toString();
-        return !tokenNotRequiredUris.contains(path);
+        return !(tokenNotRequiredUris.contains(path) || path.startsWith("/trade/markets/kline/"));
     }
 
     @Override

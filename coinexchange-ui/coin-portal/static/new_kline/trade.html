@@ -5,9 +5,10 @@
 	<title>pcn</title>
 	<link href="../css/kline.css" rel="stylesheet" type="text/css">
 	<script src="/static/config.js"></script>
-  <script src="lib/jquery.js"></script>
-  <script src="lib/jquery.mousewheel.js"></script>
-  <script src="lib/SocketHandler.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+    <script src="lib/jquery.js"></script>
+    <script src="lib/jquery.mousewheel.js"></script>
+    <script src="lib/SocketHandler.js"></script>
 </head>
 <body>
 
@@ -515,14 +516,14 @@
 <script src="lib/kline.draw.js"></script>
 <script type="text/javascript">
 var option = {
-	market_from: queryString('symbol'),
+  market_from: queryString('symbol'),
 	// market_from_name: queryString('marketName'),
-	url: window.config.socketServer,
-	subscribePath: "market.~symbol~.kline.~period~",
-  ///trade/market/kline/{symbol}/{lintType}
-   ajaxURL:window.config.ajaxServer+"/trade/markets/kline/~symbol~/~period~"
+  url: window.config.socketServer,
+  subscribePath: 'market.~symbol~.kline.~period~',
+  // /trade/market/kline/{symbol}/{lintType}
+  ajaxURL: window.config.ajaxServer + '/trade/markets/kline/~symbol~/~period~'
 
-};
+}
 new KLine(option).draw()
 </script>
 </body>

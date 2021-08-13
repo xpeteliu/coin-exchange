@@ -1,5 +1,6 @@
 package io.github.xpeteliu.controller;
 
+import io.github.xpeteliu.dto.TradeAreaDto;
 import io.github.xpeteliu.entity.Market;
 import io.github.xpeteliu.entity.TradeArea;
 import io.github.xpeteliu.model.PagedResult;
@@ -113,5 +114,10 @@ public class TradeAreaController {
     public R<List<TradeAreaMarketResult>> findUserFavoriteMarket() {
         List<TradeAreaMarketResult> results = tradeAreaService.findUserFavoriteMarket();
         return R.success(results);
+    }
+
+    @GetMapping("/findAllTradeAreas")
+    public List<TradeAreaDto> findAllTradeAreas() {
+        return tradeAreaService.findAllTradeAreasWithMarkets();
     }
 }

@@ -1,6 +1,5 @@
 package io.github.xpeteliu.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +12,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
-
-import java.security.KeyPair;
 
 @Configuration
 @EnableAuthorizationServer
@@ -43,8 +39,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode("testsct"))
                 .scopes("all")
                 .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(24 * 7200)
-                .refreshTokenValiditySeconds(7 * 24 * 7200)
+                .accessTokenValiditySeconds(7 * 24 * 3600)
+                .refreshTokenValiditySeconds(30 * 24 * 3600)
                 .and()
                 .withClient("testinternalcli")
                 .secret(passwordEncoder.encode("testsct"))
@@ -71,7 +67,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         ClassPathResource keyStore = new ClassPathResource("coinexchange.jks");
         KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(keyStore, "testpwd".toCharArray());
-        jwtAccessTokenConverter.setKeyPair(keyStoreKeyFactory.getKeyPair("coinexchange","testpwd".toCharArray()));
+        jwtAccessTokenConverter.setKeyPair(keyStoreKeyFactory.getKeyPair("coinexchange", "testpwd".toCharArray()));
         return jwtAccessTokenConverter;
     }
 

@@ -3,6 +3,7 @@ package io.github.xpeteliu.feign;
 
 import io.github.xpeteliu.config.feign.OAuth2FeignConfig;
 import io.github.xpeteliu.dto.MarketDto;
+import io.github.xpeteliu.dto.TradeMarketDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -19,4 +20,6 @@ public interface MarketServiceFeignClient {
     @GetMapping(value = "/allMarkets")
     List<MarketDto> findAllMarkets(@RequestHeader("Authorization") String authorization);
 
+    @GetMapping(value = "/findTradeMarketsByTradeAreaId")
+    List<TradeMarketDto> findTradeMarketsByTradeAreaId(@RequestParam Long tradeAreaId, @RequestHeader("Authorization") String authorization);
 }

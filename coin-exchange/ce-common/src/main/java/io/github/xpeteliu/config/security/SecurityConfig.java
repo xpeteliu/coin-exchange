@@ -29,7 +29,7 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(expressionInterceptUrlRegistry ->
                         expressionInterceptUrlRegistry.antMatchers(
-                                "/test",
+                                "/markets/kline/**",
                                 "/login",
                                 "/v3/api-docs",
                                 "/swagger-resources/configuration/ui",

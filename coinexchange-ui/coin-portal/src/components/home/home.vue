@@ -433,7 +433,7 @@
       },
       subscribeMarkets(market) {
       this.$socket.subscribe(this.subscribePath(market), 'market-area');
-        this.$socket.on(`market-area-${market}`, (data) => {
+        this.$socket.on(`market-area-${market.toLowerCase()}`, (data) => {
           // console.log("市场订阅",data.markets)
           if (data.markets) {
             let i = this.activeIndex;

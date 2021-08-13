@@ -1,9 +1,11 @@
 package io.github.xpeteliu.service;
 
 import io.github.xpeteliu.dto.CoinDto;
+import io.github.xpeteliu.dto.TradeAreaDto;
 import io.github.xpeteliu.entity.Market;
 import io.github.xpeteliu.entity.TradeArea;
 import io.github.xpeteliu.feign.CoinServiceFeignClient;
+import io.github.xpeteliu.mapper.TradeAreaDtoMapper;
 import io.github.xpeteliu.model.MergeDepthResult;
 import io.github.xpeteliu.model.TradeAreaMarketResult;
 import io.github.xpeteliu.model.TradeMarketResult;
@@ -63,9 +65,7 @@ public class TradeAreaService {
     }
 
     public List<TradeArea> findByStatus(Integer status) {
-        TradeArea tradeArea = new TradeArea();
-        tradeArea.setStatus(status);
-        return tradeAreaRepository.findAll(Example.of(tradeArea));
+        return tradeAreaRepository.findByStatus(status);
     }
 
     public List<TradeAreaMarketResult> findAllTradeAreaWithMarket() {
@@ -175,5 +175,16 @@ public class TradeAreaService {
         result.setAreaName("My Favorite");
         result.setMarkets(convertToMarketResult(favoriteMarkets));
         return Collections.singletonList(result);
+    }
+
+    public List<TradeAreaDto> findAllTradeAreasWithMarkets() {
+        List<TradeArea> tradeAreas = findByStatus(1);
+        List<TradeAreaDto> tradeAreaDtos = TradeAreaDtoMapper.INSTANCE.entity2Dto(tradeAreas);
+        tradeAreaDtos.forEach(tradeAreaDto -> {
+            List<Market> markets = marketService.findByTradeAreaId(tradeAreaDto.getId());
+            String marketIds = markets.stream().map(market -> market.getId().toString()).collect(Collectors.joining(","));
+            tradeAreaDto.setMarketIds(marketIds);
+        });
+        return tradeAreaDtos;
     }
 }

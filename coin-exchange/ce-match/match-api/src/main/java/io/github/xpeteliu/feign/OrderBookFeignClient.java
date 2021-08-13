@@ -14,5 +14,5 @@ import java.util.Map;
 public interface OrderBookFeignClient {
 
     @GetMapping("/depth")
-    Map<String, List<DepthItemResult>> findMarketDepth(@RequestParam String symbol, @RequestHeader("Authorization") String authorization);
+    Map<String, List<DepthItemResult>> findMarketDepth(@RequestParam List<String> symbols, @RequestHeader("Authorization") String authorization);
 }

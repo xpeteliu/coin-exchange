@@ -19,19 +19,12 @@ public interface AccountServiceFeignClient {
                               @RequestParam Long orderId,
                               @RequestParam BigDecimal fee);
 
-    @GetMapping("/transferSellAmount")
-    public void transferSellAmount(@RequestParam Long fromUserId,
+    @GetMapping("/transferBalance")
+    public void transferBalance(@RequestParam Long fromUserId,
                                    @RequestParam Long toUserId,
                                    @RequestParam Long coinId,
                                    @RequestParam BigDecimal amount,
                                    @RequestParam String businessType,
                                    @RequestParam Long orderId);
 
-    @GetMapping("/transferBuyAmount")
-    public void transferBuyAmount(@RequestParam Long fromUserId,
-                                  @RequestParam Long toUserId,
-                                  @RequestParam Long coinId,
-                                  @RequestParam BigDecimal amount,
-                                  @RequestParam String businessType,
-                                  @RequestParam Long orderId);
 }

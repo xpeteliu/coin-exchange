@@ -1,14 +1,15 @@
 package io.github.xpeteliu.model;
 
-import com.alibaba.fastjson.JSONArray;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class KLine {
 
     /**
@@ -42,8 +43,6 @@ public class KLine {
      */
     private BigDecimal volume;
 
-    public KLine() {
-    }
 
     /**
      * 通过价格构造
@@ -66,16 +65,18 @@ public class KLine {
      *
      * @return
      */
-    public String toKline() {
-        // 时间，开，高，低，收，量
-        JSONArray array = new JSONArray();
-        array.add(time.toInstant(ZoneOffset.of("+8")).toEpochMilli());
-        array.add(open);
-        array.add(high);
-        array.add(low);
-        array.add(close);
-        array.add(volume);
-        return array.toJSONString();
+    public String toCompactString() {
+        List outputList = toOutputList();
+        StringBuilder stringBuilder = new StringBuilder(outputList.get(0).toString());
+        for (int i = 1; i <= 5; i++) {
+            stringBuilder.append(",").append(outputList.get(i));
+        }
+        return stringBuilder.toString();
+    }
+
+    public List<BigDecimal> toOutputList() {
+        return List.of(new BigDecimal(time.toInstant(ZoneOffset.of("+8")).toEpochMilli()),
+                open, high, low, close, volume);
     }
 }
 

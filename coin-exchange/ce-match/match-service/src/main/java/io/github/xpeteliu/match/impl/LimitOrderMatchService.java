@@ -63,7 +63,7 @@ public class LimitOrderMatchService implements MatchService, InitializingBean {
                     if (previousOrder.isCompleted()) {
                         completedOrders.add(previousOrder);
                         orderIterator.remove();
-                        orderBook.getMarketDepthTable(direction).remove(previousOrder, tradeRecord.getAmount());
+                        orderBook.getMarketDepthTable(previousOrder.getOrderDirection()).remove(previousOrder, tradeRecord.getAmount());
                     }
                     if (order.isCompleted()) {
                         completedOrders.add(order);
@@ -83,10 +83,10 @@ public class LimitOrderMatchService implements MatchService, InitializingBean {
         if (!CollectionUtils.isEmpty(tradeRecords)) {
             sendTradeRecords(tradeRecords);
         }
-        if (!CollectionUtils.isEmpty(completedOrders)) {
-            sendCompletedOrders(completedOrders);
-            sendMarketDepth(orderBook.getMarketDepthTable(direction));
-        }
+//        if (!CollectionUtils.isEmpty(completedOrders)) {
+//            sendCompletedOrders(completedOrders);
+//            sendMarketDepth(orderBook.getMarketDepthTable(direction));
+//        }
     }
 
     private void sendTradeRecords(List<TradeRecord> tradeRecords) {
@@ -135,8 +135,8 @@ public class LimitOrderMatchService implements MatchService, InitializingBean {
         tradeRecord.setDirection(taker.getOrderDirection());
         tradeRecord.setBuyOrderId(buyOrder.getOrderId());
         tradeRecord.setSellOrderId(sellOrder.getOrderId());
-        tradeRecord.setBuyTurnover(buyOrder.getTurnover());
-        tradeRecord.setSellTurnover(sellOrder.getTurnover());
+        tradeRecord.setBuyTurnover(turnover.setScale(orderBook.getCoinScale(), RoundingMode.HALF_UP));
+        tradeRecord.setSellTurnover(turnover.setScale(orderBook.getBaseCoinScale(), RoundingMode.HALF_UP));
 
         orderBook.getMarketDepthTable(maker.getOrderDirection()).remove(maker, turnoverAmount);
 

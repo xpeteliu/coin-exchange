@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class MergeDepthDTO {
+public class MergeDepthDto {
 
     /**
      * 合并类型

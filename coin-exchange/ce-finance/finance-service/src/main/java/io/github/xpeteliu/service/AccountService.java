@@ -6,6 +6,7 @@ import io.github.xpeteliu.entity.AccountDetail;
 import io.github.xpeteliu.entity.Coin;
 import io.github.xpeteliu.entity.Config;
 import io.github.xpeteliu.feign.MarketServiceFeignClient;
+import io.github.xpeteliu.model.CoinTransferRequest;
 import io.github.xpeteliu.model.SymbolAssetResult;
 import io.github.xpeteliu.repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -140,61 +141,55 @@ public class AccountService {
         return symbolAssetResult;
     }
 
-    public void transferBuyAmount(Long fromUserId, Long toUserId, Long coinId, BigDecimal amount, String businessType, Long orderId) {
-        Account fromAccount = findCoinAccount(coinId, fromUserId);
+    @Transactional
+    public void transferBalance(Long fromUserId, Long toUserId, Long coinId, BigDecimal amount, String businessType, Long orderId) {
+
+        Account fromAccount = findCoinAccount(fromUserId, coinId);
         if (fromAccount == null) {
-            log.error("资金划转-Invalid coin account，userId:{}, coinId:{}", fromUserId, coinId);
-            throw new IllegalArgumentException("Invalid coin account");
-        } else {
-            Account toAccount = findCoinAccount(toUserId, coinId);
-            if (toAccount == null) {
-                throw new IllegalArgumentException("Invalid coin account");
-            } else {
-                decreaseAmount(fromAccount, amount);
-                addAmount(toAccount, amount);
-
-                List<AccountDetail> accountDetails = new ArrayList(2);
-                AccountDetail fromAccountDetail = new AccountDetail(null, fromUserId, coinId, fromAccount.getId(), toAccount.getId(), orderId, 2, businessType, amount, BigDecimal.ZERO, businessType, null);
-                AccountDetail toAccountDetail = new AccountDetail(null, toUserId, coinId, toAccount.getId(), fromAccount.getId(), orderId, 1, businessType, amount, BigDecimal.ZERO, businessType, null);
-                accountDetails.add(fromAccountDetail);
-                accountDetails.add(toAccountDetail);
-
-                accountDetailService.savaAll(accountDetails);
-            }
+            throw new IllegalArgumentException("Invalid source coin account: " + fromUserId + "/" + coinId);
         }
-    }
 
-    public void transferSellAmount(Long fromUserId, Long toUserId, Long coinId, BigDecimal amount, String businessType, Long orderId) {
-        Account fromAccount = findCoinAccount(coinId, fromUserId);
-        if (fromAccount == null) {
-            log.error("Invalid coin account，userId:{}, coinId:{}", fromUserId, coinId);
-            throw new IllegalArgumentException("Invalid coin account");
-        } else {
-            Account toAccount = findCoinAccount(toUserId, coinId);
-            if (toAccount == null) {
-                throw new IllegalArgumentException("Invalid coin account");
-            } else {
-                addAmount(fromAccount, amount);
-                decreaseAmount(toAccount, amount);
-                List<AccountDetail> accountDetails = new ArrayList(2);
-                AccountDetail fromAccountDetail = new AccountDetail(null, fromUserId, coinId, fromAccount.getId(), toAccount.getId(), orderId, 2, businessType, amount, BigDecimal.ZERO, businessType, null);
-                AccountDetail toAccountDetail = new AccountDetail(null, toUserId, coinId, toAccount.getId(), fromAccount.getId(), orderId, 1, businessType, amount, BigDecimal.ZERO, businessType, null);
-                accountDetails.add(fromAccountDetail);
-                accountDetails.add(toAccountDetail);
-
-                accountDetailService.savaAll(accountDetails);
-            }
+        Account toAccount = findCoinAccount(toUserId, coinId);
+        if (toAccount == null) {
+            throw new IllegalArgumentException("Invalid target coin account: " + toUserId + "/" + coinId);
         }
+
+        fromAccount.setFreezeAmount(fromAccount.getFreezeAmount().subtract(amount));
+        accountRepository.save(fromAccount);
+
+        toAccount.setBalanceAmount(toAccount.getBalanceAmount().add(amount));
+        accountRepository.save(toAccount);
+
+        List<AccountDetail> accountDetails = new ArrayList<>(2);
+        AccountDetail fromAccountDetail = new AccountDetail(null, fromUserId, coinId, fromAccount.getId(), toAccount.getId(), orderId, 2, businessType, amount, BigDecimal.ZERO, businessType, null);
+        AccountDetail toAccountDetail = new AccountDetail(null, toUserId, coinId, toAccount.getId(), fromAccount.getId(), orderId, 1, businessType, amount, BigDecimal.ZERO, businessType, null);
+        accountDetails.add(fromAccountDetail);
+        accountDetails.add(toAccountDetail);
+
+        accountDetailService.savaAll(accountDetails);
+
     }
 
-    private void addAmount(Account account, BigDecimal amount) {
-        account.setBalanceAmount(account.getBalanceAmount().add(amount));
-        accountRepository.save(account);
-    }
+    @Transactional
+    public void handleCoinTransferRequest(CoinTransferRequest transferRequest) {
 
-    private void decreaseAmount(Account account, BigDecimal amount) {
-        account.setBalanceAmount(account.getBalanceAmount().subtract(amount));
-        accountRepository.save(account);
+        // transfer base coin (e.g. GCN in BTC/GCN)
+        transferBalance(
+                transferRequest.getBuyUserId(),
+                transferRequest.getSellUserId(),
+                transferRequest.getBuyCoinId(),
+                transferRequest.getBuyAmount(),
+                transferRequest.getBusinessType(),
+                transferRequest.getBuyOrderId());
+
+        // transfer target coin (e.g. BTC in BTC/GCN)
+        transferBalance(
+                transferRequest.getSellUserId(),
+                transferRequest.getBuyUserId(),
+                transferRequest.getSellCoinId(),
+                transferRequest.getSellAmount(),
+                transferRequest.getBusinessType(),
+                transferRequest.getSellOrderId());
     }
 
 }

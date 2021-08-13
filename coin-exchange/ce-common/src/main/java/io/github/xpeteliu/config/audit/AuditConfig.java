@@ -20,7 +20,11 @@ class SpringSecurityAuditorAware implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-        Long userId = Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-        return Optional.of(userId);
+        try {
+            Long userId = Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            return Optional.of(userId);
+        } catch (NullPointerException e) {
+            return Optional.empty();
+        }
     }
 }

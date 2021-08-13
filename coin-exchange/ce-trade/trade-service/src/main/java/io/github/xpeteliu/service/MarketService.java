@@ -2,6 +2,8 @@ package io.github.xpeteliu.service;
 
 import io.github.xpeteliu.dto.CoinDto;
 import io.github.xpeteliu.dto.MarketDto;
+import io.github.xpeteliu.dto.MergeDepthDto;
+import io.github.xpeteliu.dto.TradeMarketDto;
 import io.github.xpeteliu.entity.Market;
 import io.github.xpeteliu.feign.CoinServiceFeignClient;
 import io.github.xpeteliu.feign.OrderBookFeignClient;
@@ -15,9 +17,16 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MarketService {
@@ -89,12 +98,12 @@ public class MarketService {
             throw new IllegalArgumentException("Invalid market symbol");
         }
 
-        Map<String, List<DepthItemResult>> marketDepth = orderBookFeignClient.findMarketDepth(symbol, null);
+        Map<String, List<DepthItemResult>> marketDepth = orderBookFeignClient.findMarketDepth(Collections.singletonList(symbol), null);
         DepthResult result = new DepthResult();
         result.setCnyPrice(market.getOpenPrice());
         result.setPrice(market.getOpenPrice());
-        result.setAsks(marketDepth.get("asks"));
-        result.setBids(marketDepth.get("bids"));
+        result.setAsks(marketDepth.get("asks-" + symbol));
+        result.setBids(marketDepth.get("bids-" + symbol));
         return result;
     }
 
@@ -104,5 +113,95 @@ public class MarketService {
 
     public List<MarketDto> findAllMarkets() {
         return MarketDtoMapper.INSTANCE.entity2Dto(marketRepository.findAll());
+    }
+
+    public List<TradeMarketDto> findTradeMarketsByTradeAreaId(Long tradeAreaId) {
+        return convertToMarketResult(findByTradeAreaId(tradeAreaId));
+    }
+
+    private List<TradeMarketDto> convertToMarketResult(List<Market> markets) {
+        return markets.stream().map(market -> {
+            TradeMarketDto tradeMarketDto = new TradeMarketDto();
+            tradeMarketDto.setImage(market.getImg());
+            tradeMarketDto.setName(market.getName());
+            tradeMarketDto.setSymbol(market.getSymbol());
+
+
+            // TODO: set prices
+            tradeMarketDto.setHigh(market.getOpenPrice());
+            tradeMarketDto.setLow(market.getOpenPrice());
+            tradeMarketDto.setPrice(market.getOpenPrice());
+            tradeMarketDto.setCnyPrice(market.getOpenPrice());
+            tradeMarketDto.setCnyPrice(market.getOpenPrice());
+            tradeMarketDto.setPriceScale(market.getPriceScale());
+
+
+            @NotNull Long buyCoinId = market.getBuyCoinId();
+            Map<Long, CoinDto> coins = coinServiceFeignClient.findCoins(Collections.singletonList(buyCoinId));
+
+            if (CollectionUtils.isEmpty(coins) || coins.size() > 1) {
+                throw new IllegalArgumentException("Invalid coin ID");
+            }
+            CoinDto coinDto = coins.values().iterator().next();
+            tradeMarketDto.setPriceUnit(coinDto.getName());
+
+
+            tradeMarketDto.setTradeMin(market.getTradeMin());
+            tradeMarketDto.setTradeMax(market.getTradeMax());
+
+            tradeMarketDto.setNumMin(market.getNumMin());
+            tradeMarketDto.setNumMax(market.getNumMax());
+
+            tradeMarketDto.setSellFeeRate(market.getFeeSell());
+            tradeMarketDto.setBuyFeeRate(market.getFeeBuy());
+
+            tradeMarketDto.setNumScale(market.getNumScale());
+
+
+            tradeMarketDto.setSort(market.getSort());
+
+            tradeMarketDto.setVolume(BigDecimal.ZERO);
+            tradeMarketDto.setAmount(BigDecimal.ZERO);
+
+
+            tradeMarketDto.setChange(0.00);
+
+            tradeMarketDto.setMergeDepth(convertMergeDepths(market.getMergeDepth()));
+
+            return tradeMarketDto;
+        }).collect(Collectors.toList());
+    }
+
+    private List<MergeDepthDto> convertMergeDepths(String mergeDepth) {
+
+        String[] split = mergeDepth.split(",");
+        if (split.length != 3) {
+            throw new IllegalArgumentException("Invalid merge depth");
+        }
+
+        MergeDepthDto minMergeDepthDto = new MergeDepthDto();
+        minMergeDepthDto.setMergeType("MIN");
+        minMergeDepthDto.setValue(convertDepthValue(Integer.valueOf(split[0])));
+
+
+        MergeDepthDto defaultMergeDepthDto = new MergeDepthDto();
+        defaultMergeDepthDto.setMergeType("DEFAULT");
+        defaultMergeDepthDto.setValue(convertDepthValue(Integer.valueOf(split[1])));
+
+        MergeDepthDto maxMergeDepthDto = new MergeDepthDto();
+        maxMergeDepthDto.setMergeType("MAX");
+        maxMergeDepthDto.setValue(convertDepthValue(Integer.valueOf(split[2])));
+
+        List<MergeDepthDto> mergeDepthDtos = new ArrayList<>();
+        mergeDepthDtos.add(minMergeDepthDto);
+        mergeDepthDtos.add(defaultMergeDepthDto);
+        mergeDepthDtos.add(maxMergeDepthDto);
+
+        return mergeDepthDtos;
+    }
+
+    private BigDecimal convertDepthValue(Integer scale) {
+        BigDecimal bigDecimal = BigDecimal.valueOf(Math.pow(10, scale));
+        return BigDecimal.ONE.divide(bigDecimal).setScale(scale, RoundingMode.HALF_UP);
     }
 }
