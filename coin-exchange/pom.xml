@@ -11,8 +11,7 @@
         <module>ce-match</module>
         <module>ce-common</module>
         <module>ce-member</module>
-        <module>ce-task</module>
-        <module>ce-statistics</module>
+        <!--        <module>ce-statistics</module>-->
         <module>ce-channel</module>
         <module>ce-finance</module>
     </modules>
@@ -107,7 +106,31 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <docker>
+                            <host>tcp://192.168.137.102:2375</host>
+                        </docker>
+                        <image>
+                            <env>
+                                <HTTP_PROXY>http://192.168.137.1:7890</HTTP_PROXY>
+                                <HTTPS_PROXY>http://192.168.137.1:7890</HTTPS_PROXY>
+                            </env>
+                        </image>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
