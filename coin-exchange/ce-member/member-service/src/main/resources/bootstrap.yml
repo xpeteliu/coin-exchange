@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    nacos:
+      server-addr: nacos-server:8848
+      config:
+        file-extension: yml
+  application:
+    name: member-service
+  profiles:
+    active: dev

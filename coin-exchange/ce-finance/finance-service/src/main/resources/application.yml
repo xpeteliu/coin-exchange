@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka-server
+      bindings:
+        receiveCoinTransferRequest-in-0:
+          destination: coinTransferRequest
+          content-type: application/json
+      function:
+        definition: receiveCoinTransferRequest
+  kafka:
+    consumer:
+      auto-offset-reset: latest

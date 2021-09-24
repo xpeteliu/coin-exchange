@@ -1,0 +1,67 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql-server:3306/coin-exchange?serverTimezone=GMT%2B8
+    username: root
+    password: testpwd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: redis-server
+    port: 6379
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: coinexchange.pub
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka-server
+      function:
+        definition: forwardSubmittedOrder
+      bindings:
+        forwardSubmittedOrder-in-0:
+          destination: submittedOrder
+          group: orderRouter
+          content-type: application/json
+        sendTradeRecords-out-0:
+          destination: tradeRecords
+          content-type: application/json
+        sendCompletedOrders-out-0:
+          destination: completedOrders
+          content-type: application/json
+        sendMarketDepth-out-0:
+          destination: marketDepth
+          content-type: application/json
+      source: sendTradeRecords;sendCompletedOrders;sendMarketDepth
+  kafka:
+    consumer:
+      auto-offset-reset: latest
+  application:
+    name: match-service
+match:
+  scaleInfo:
+    FOFTGCN:
+      coinScale: 8
+      baseCoinScale: 8
+    CEOCGCN:
+      coinScale: 8
+      baseCoinScale: 8
+    KJLGCN:
+      coinScale: 8
+      baseCoinScale: 8
+    LTCGCN:
+      coinScale: 8
+      baseCoinScale: 8
+    BTCGCN:
+      coinScale: 8
+      baseCoinScale: 8
+    ETHGCN:
+      coinScale: 8
+      baseCoinScale: 8
+    AEGCN:
+      coinScale: 8
+      baseCoinScale: 8
+    QTUMGCN:
+      coinScale: 8
+      baseCoinScale: 8

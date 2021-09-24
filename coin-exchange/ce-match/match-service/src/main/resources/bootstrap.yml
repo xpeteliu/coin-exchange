@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: match-service
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+      server-addr: nacos-server:8848
+
+  profiles:
+    active: dev

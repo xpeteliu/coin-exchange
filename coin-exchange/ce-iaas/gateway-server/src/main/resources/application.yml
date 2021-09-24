@@ -1,0 +1,58 @@
+server:
+  port: 80
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    nacos:
+      server-addr: nacos-server:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+      - id: admin-service_router
+        uri: lb://admin-service
+        predicates:
+          - Path=/admin/**
+        filters:
+          - StripPrefix=1
+      - id: member-service_router
+        uri: lb://member-service
+        predicates:
+          - Path=/user/**
+        filters:
+          - StripPrefix=1
+      - id: finance-service_router
+        uri: lb://finance-service
+        predicates:
+          - Path=/finance/**
+        filters:
+          - StripPrefix=1
+      - id: trade-service_router
+        uri: lb://trade-service
+        predicates:
+          - Path=/trade/**
+        filters:
+          - StripPrefix=1
+
+    sentinel:
+      datasource:
+        ds1.nacos:
+          server-addr: nacos-server:8848
+          dataId: gw-flow
+          ruleType: gw_flow
+        ds2.nacos:
+          server-addr: nacos-server:8848
+          dataId: api-group
+          ruleType: gw_api_group
+  #      transport:
+  #        dashboard: sentinel-dashboard:8858
+  #        port: 8179
+  #        clientIp: 192.168.137.1
+
+  redis:
+    host: redis-server
+    port: 6379
+
