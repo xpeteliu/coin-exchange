@@ -1,7 +1,7 @@
-# CoinExchange, by Xinyue (Pete) Liu
+# Coin Exchange, by Xinyue (Pete) Liu
 
 ### Description
-This project was originally maintained in a private Gitee repo, and then forked here after completion. My backend work for the online crypto exchange is located in the directory */coin-exchange*. The folder *coinexchange-ui* contains its corresponding frontend codes, which were not created by me (but I modified part of them to add support for Websocket and STOMP requests).
+This project was originally maintained in a private Gitee repo, and then migrated here after completion. My backend work for the online crypto exchange is located in the directory */coin-exchange*. The folder *coinexchange-ui* contains its corresponding frontend codes, which were not created by me (but I modified part of them to add support for Websocket and STOMP requests).
 
 ### File Structure
 This backend project tries to follow the microservice architecture and the Domain-Driven Design pattern. Each subfolder in */coin-exchange* contains a microservice of its own (except for *ce-common*, which serves as a common dependency for other modules and provides some repetitively used helper functions). These modules can be run on different server machines. Inside each module, folders named like *\*-api* contain the interfaces for the inter-service Remote Procedure Calls and probably other supporting codes pertaining to RPC (e.g., definitions of Data Transfer Objects). In this project, the RPCs are implemented via OpenFeign, and the FeignClient instances are also defined in the *"\*-api"* folders. 
