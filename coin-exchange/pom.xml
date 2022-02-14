@@ -11,7 +11,6 @@
         <module>ce-match</module>
         <module>ce-common</module>
         <module>ce-member</module>
-        <!--        <module>ce-statistics</module>-->
         <module>ce-channel</module>
         <module>ce-finance</module>
     </modules>
